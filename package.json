@@ -1,0 +1,25 @@
+{
+  "name": "zhiliao-plugin-cls-query",
+  "version": "1.0.0",
+  "description": "Tencent Cloud CLS log query plugin for zhiliao",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "zhiliao",
+    "plugin",
+    "cls",
+    "tencent-cloud",
+    "logging"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "tencentcloud-sdk-nodejs-cls": "^4.1.207"
+  }
+}

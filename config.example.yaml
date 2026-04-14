@@ -1,0 +1,15 @@
+# Required: Tencent Cloud credentials
+# Get from https://console.cloud.tencent.com/cam/capi
+secret_id: "${TENCENTCLOUD_SECRET_ID}"
+secret_key: "${TENCENTCLOUD_SECRET_KEY}"
+
+# Optional: default region (can be overridden per query)
+default_region: "ap-nanjing"
+
+# Known topics: only identity (topic_id + region)
+# Topic knowledge (fields, conventions, query patterns) lives in knowledge/{topic_name}/
+# See knowledge/CLAUDE.md for the authoring guide
+known_topics:
+  my_app:
+    topic_id: "your-topic-id-here"
+    region: "ap-nanjing"
