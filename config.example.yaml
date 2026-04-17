@@ -1,7 +1,7 @@
 # Required: Tencent Cloud credentials
 # Get from https://console.cloud.tencent.com/cam/capi
-secret_id: "${TENCENTCLOUD_SECRET_ID}"
-secret_key: "${TENCENTCLOUD_SECRET_KEY}"
+secret_id: "your-secret-id"
+secret_key: "your-secret-key"
 
 # Optional: default region (can be overridden per query)
 default_region: "ap-nanjing"
@@ -13,3 +13,8 @@ known_topics:
   my_app:
     topic_id: "your-topic-id-here"
     region: "ap-nanjing"
+
+# Optional: override the knowledge directory (absolute path). Defaults to
+# {plugin_root}/knowledge. Useful for deployments that want knowledge files
+# isolated from the plugin source tree (e.g. /var/lib/zhiliao/knowledge/cls-query).
+# knowledge_dir: "/absolute/path/to/knowledge"

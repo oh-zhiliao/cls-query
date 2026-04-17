@@ -11,7 +11,7 @@ const ClsClient = tencentCls.cls.v20201016.Client;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PLUGIN_ROOT = resolve(__dirname, "..");
-const KNOWLEDGE_DIR = resolve(PLUGIN_ROOT, "knowledge");
+const DEFAULT_KNOWLEDGE_DIR = resolve(PLUGIN_ROOT, "knowledge");
 
 interface KnownTopic {
   topic_id: string;
@@ -35,6 +35,10 @@ interface CLSQueryConfig {
   secret_key: string;
   default_region: string;
   known_topics?: Record<string, KnownTopic>;
+  /** Absolute path override for the knowledge directory. When set, overrides the
+   *  default colocated `{plugin_root}/knowledge`. Useful for deploy environments
+   *  that want knowledge files isolated from the plugin source tree. */
+  knowledge_dir?: string;
 }
 
 function parseFrontmatter(content: string): { meta: Record<string, string>; body: string } {
@@ -93,6 +97,7 @@ export default class CLSQueryPlugin implements ToolPlugin {
   name = "";
   private config!: CLSQueryConfig;
   private knowledge = new Map<string, TopicKnowledge>();
+  private knowledgeDir = DEFAULT_KNOWLEDGE_DIR;
 
   async init(config: Record<string, any>): Promise<void> {
     if (!config.secret_id || config.secret_id.startsWith("${")) {
@@ -102,17 +107,20 @@ export default class CLSQueryPlugin implements ToolPlugin {
       throw new Error("TENCENTCLOUD_SECRET_KEY not configured");
     }
     this.config = config as CLSQueryConfig;
+    if (this.config.knowledge_dir) {
+      this.knowledgeDir = this.config.knowledge_dir;
+    }
     this.loadKnowledge();
   }
 
   async destroy(): Promise<void> {}
 
   private loadKnowledge(): void {
-    if (!existsSync(KNOWLEDGE_DIR)) return;
+    if (!existsSync(this.knowledgeDir)) return;
 
     const topicNames = Object.keys(this.config.known_topics || {});
     for (const topicName of topicNames) {
-      const topicDir = join(KNOWLEDGE_DIR, topicName);
+      const topicDir = join(this.knowledgeDir, topicName);
       if (!existsSync(topicDir)) continue;
 
       const catalogPath = join(topicDir, "_catalog.md");
